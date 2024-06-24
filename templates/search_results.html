@@ -1,0 +1,44 @@
+<!-- search_results.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+    Search Results
+{% endblock title %}
+
+{% block body %}
+<div class="container my-3">
+    <h2>Search Results</h2>
+    <p>Showing results for "{{ search_query }}":</p>
+    {% if filtered_todos %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">SNo</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for todo in filtered_todos %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ todo.title }}</td>
+                        <td>{{ todo.desc }}</td>
+                        <td>{{ todo.date_created }}</td>
+                        <td>
+                            <a href="/update/{{ todo.sno }}" class="btn btn-outline-success btn-sm mx-1">Update</a>
+                            <a href="/delete/{{ todo.sno }}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-dark" role="alert">
+            No Todos found matching "{{ search_query }}"
+        </div>
+    {% endif %}
+</div>
+{% endblock body %}
