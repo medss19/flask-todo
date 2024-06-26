@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -9,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Add a secret key for session management
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -23,14 +25,64 @@ class Todo(db.Model):
     title = db.Column(db.String(200), nullable=False)
     desc = db.Column(db.String(500), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    due_date = db.Column(db.DateTime, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    is_done = db.Column(db.Boolean, default=False)
+    priority = db.Column(db.String(10), nullable=False, default='Medium')
+
+    def formatted_date(self):
+        return self.date_created.strftime("%B %d, %Y")
+
+    def formatted_due_date(self):
+        return self.due_date.strftime("%B %d, %Y") if self.due_date else "No due date"
 
     def __repr__(self):
         return f"{self.sno} - {self.title}"
 
+@app.route('/toggle_done/<int:todo_id>', methods=['POST'])
+@login_required
+def toggle_done(todo_id):
+    todo = Todo.query.get(todo_id)
+    if todo and todo.user_id == current_user.id:
+        todo.is_done = not todo.is_done
+        db.session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.route('/update_priority/<int:sno>', methods=['POST'])
+@login_required
+def update_priority(sno):
+    todo = Todo.query.filter_by(sno=sno, user_id=current_user.id).first()
+    if not todo:
+        return jsonify({'success': False}), 404
+    
+    data = request.json
+    new_priority = data.get('priority')
+    
+    if new_priority:
+        todo.priority = new_priority
+        db.session.commit()
+        return jsonify({'success': True})
+    
+    return jsonify({'success': False}), 400
+
+@app.route('/update_due_date/<int:todo_id>', methods=['POST'])
+@login_required
+def update_due_date(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    data = request.get_json()
+    due_date_str = data.get('due_date')
+    if due_date_str:
+        due_date = datetime.strptime(due_date_str, "%Y-%m-%d")
+        todo.due_date = due_date
+    else:
+        todo.due_date = None
+    db.session.commit()
+    return jsonify(success=True)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -89,6 +141,29 @@ def search():
 
     return render_template('search_results.html', filtered_todos=filtered_todos, search_query=search_query)
 
+@app.route('/filter', methods=['GET'])
+@login_required
+def filter_todos():
+    filter_option = request.args.get('filter', 'all')
+    if filter_option == 'due_date':
+        allTodo = Todo.query.filter_by(user_id=current_user.id).order_by(Todo.due_date.asc()).all()
+    elif filter_option == 'priority':
+        allTodo = Todo.query.filter_by(user_id=current_user.id).order_by(
+            db.case(
+                (Todo.priority == 'high', 1),
+                (Todo.priority == 'medium', 2),
+                (Todo.priority == 'low', 3),
+                else_=4
+            )
+        ).all()
+    elif filter_option == 'done':
+        allTodo = Todo.query.filter_by(user_id=current_user.id, is_done=True).all()
+    elif filter_option == 'not_done':
+        allTodo = Todo.query.filter_by(user_id=current_user.id, is_done=False).all()
+    else:
+        allTodo = Todo.query.filter_by(user_id=current_user.id).all()
+    return render_template('index.html', allTodo=allTodo)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -103,6 +178,7 @@ def hello_world():
     allTodo = Todo.query.filter_by(user_id=current_user.id).all()
     return render_template('index.html', allTodo=allTodo)
 
+
 @app.route('/update/<int:sno>', methods=['GET', 'POST'])
 @login_required
 def update(sno):
@@ -114,7 +190,7 @@ def update(sno):
         todo.desc = desc
         db.session.commit()
         return redirect("/")
-
+    
     todo = Todo.query.filter_by(sno=sno).first()
     return render_template('update.html', todo=todo)
 
@@ -125,6 +201,11 @@ def delete(sno):
     db.session.delete(todo)
     db.session.commit()
     return redirect('/')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
