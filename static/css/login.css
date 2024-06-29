@@ -1,0 +1,117 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.container-login {
+    background-image: url('../images/login.jpg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 92.80%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.container-login::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3); 
+    z-index: 1;
+}
+
+
+.login-box {
+    width: 390px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.login-box h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 700;
+}
+
+.wrap-input100 .icon {
+    margin-left: 20px; /* Adjust margin as needed */
+    width: 30px; /* Adjust icon width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.login-form{
+    background-color: rgba(255, 255, 255, 0.9); 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.wrap-input100 {
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+}
+
+.login-form .input100 {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #555;
+    line-height: 1.2;
+    /* width: 74%; */
+    width: calc(85% - 50px);
+    margin-left: 23px;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    height: 50px;
+    background: white;
+    padding: 0px 10px;
+    transition: background-color 0.4s;
+}
+
+.input100:focus {
+    background-color: rgba(255, 255, 255, 0.9); 
+}
+
+.container-login100-form-btn {
+    width: 100%;
+    display: flex;
+    padding: 30px;
+    justify-content: center;
+}
+
+.btn-primary {
+    width: 29%;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    min-width: 110px;
+    height: 42px;
+    border-radius: 21px;
+    background: linear-gradient(to right, #a445b2, #d41872, #fa4299);
+    position: relative;
+    z-index: 1;
+    transition: background-color 0.4s;
+}

@@ -1,0 +1,22 @@
+/* styles.css */
+
+/* Style for the navbar-brand */
+.navbar-brand {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    color: #333; /* Adjust text color */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Style for the icon */
+.navbar-brand .icon {
+    margin-right: 10px; /* Adjust margin as needed */
+    width: 30px; /* Adjust icon width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Additional styles for the text */
+.navbar-brand .text {
+    font-size: 1.2rem; /* Adjust text size */
+    font-weight: bold; /* Adjust font weight */
+}

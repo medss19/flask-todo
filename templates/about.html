@@ -5,18 +5,28 @@
 {% endblock title %}
 
 {% block body %}
-<div class="container my-3">
-    <h2>About Us</h2>
-    <p>
-        Welcome to the Todo App. This application allows users to manage their tasks efficiently.
-    </p>
-    <p>
-        Features:
-        <ul>
-            <li>Add, update, and delete todos.</li>
-            <li>Mark todos as done or undone.</li>
-            <li>Search through todos.</li>
-        </ul>
-    </p>
+<div class="container my-3 d-flex align-items-center">
+    <div class="content">
+        <h2>About Us</h2>
+        <p class="welcome">
+            Welcome to the Todo App! Our mission is to help you stay organized and productive.
+        </p>
+        <p class="heading">
+            <br>
+            <strong>Why Choose Us?</strong>
+            <ul>
+                <li>Effortlessly add, update, and delete your tasks.</li>
+                <li>Mark tasks as done or undone with a single click.</li>
+                <li>Powerful search functionality to find your tasks easily.</li>
+            </ul>
+        </p>
+        <p>
+            Our app is designed to be your ultimate task management tool, making your life easier and more organized.
+        </p>
+    </div>
+    <div class="image">
+        <img src="{{ url_for('static', filename='images/about.png') }}" alt="About Us Image">
+    </div>
 </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 {% endblock body %}

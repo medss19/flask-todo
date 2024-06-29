@@ -5,18 +5,34 @@
 {% endblock title %}
 
 {% block body %}
-<div class="container">
-    <h2>Login</h2>
-    <form method="POST">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
+<div class="container-login">
+    <div class="login-box">
+        <h2>Account Login</h2>
+        <form method="POST" class="login-form">
+            <div class="wrap-input100 validate-input" data-validate="Enter username">
+                <img src="{{ url_for('static', filename='images/user.png') }}" alt="user" class="icon">
+                <input type="text" class="input100" id="username" name="username" placeholder="User name" required>
+                <span class="focus-input100" data-placeholder=""></span>
+            </div>
+            <div class="wrap-input100 validate-input" data-validate="Enter password">
+                <img src="{{ url_for('static', filename='images/pass.png') }}" alt="password" class="icon">
+                <input type="password" class="input100" id="password" name="password" placeholder="Password" required>
+                <span class="focus-input100" data-placeholder=""></span>
+            </div>
+            <div class="container-login100-form-btn m-t-32">
+                <button type="submit" class="login-btn btn-primary">Login</button>
+            </div>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <strong> <p class="flash-{{ category }}">{{ message }}</p> </strong>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
 </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock body %}

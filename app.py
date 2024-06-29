@@ -5,7 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'  # Add a secret key for session management
@@ -17,6 +17,7 @@ login_manager.login_view = 'login'
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     todos = db.relationship('Todo', backref='user', lazy=True)
 
@@ -88,16 +89,28 @@ def update_due_date(todo_id):
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
+        email = request.form.get('email')
         password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
 
-        # Check if username already exists
+        # Check if username or email already exists
         user_exists = User.query.filter_by(username=username).first()
+        email_exists = User.query.filter_by(email=email).first()
         if user_exists:
-            flash('Username already exists. Please choose a different one.')
+            flash('Username already exists. Please choose a different one.', 'danger')
+            return redirect(url_for('register'))
+        if email_exists:
+            flash('Email already exists. Please use a different one.', 'danger')
             return redirect(url_for('register'))
 
+        # Check if passwords match
+        if password != confirm_password:
+            flash('Passwords do not match. Please try again.', 'danger')
+            return redirect(url_for('register'))
+
+        # Create new user
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(username=username, password=hashed_password)
+        new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
@@ -105,6 +118,7 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('register.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
