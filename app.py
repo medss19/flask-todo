@@ -114,8 +114,8 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('login'))
+        flash('Registration successful! You are now logged in.', 'success')
+        return redirect(url_for('hello_world'))
     
     return render_template('register.html')
 
