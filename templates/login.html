@@ -23,7 +23,7 @@
                 <button type="submit" class="login-btn btn-primary">Login</button>
             </div>
         </form>
-        {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="flashes">
                     {% for category, message in messages %}
@@ -31,7 +31,16 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-        {% endwith %}
+        {% endwith %} -->
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-warning fixed-top flash-message" role="alert">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
 </div>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">

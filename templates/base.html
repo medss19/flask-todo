@@ -73,7 +73,7 @@
     <div class="container">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="alert alert-warning" role="alert">
+                <div class="alert alert-warning fixed-top flash-message" role="alert">
                     {{ messages[0] }}
                 </div>
             {% endif %}
