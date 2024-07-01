@@ -1,3 +1,5 @@
+import os
+from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -19,6 +21,11 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
+    full_name = db.Column(db.String(150), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    birth_date = db.Column(db.Date, nullable=True)
+    profile_img = db.Column(db.String(150), nullable=True)  # path to profile image
+    bio = db.Column(db.String(300), nullable=True)
     todos = db.relationship('Todo', backref='user', lazy=True)
 
 class Todo(db.Model):
@@ -39,6 +46,36 @@ class Todo(db.Model):
 
     def __repr__(self):
         return f"{self.sno} - {self.title}"
+    
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+    
+@app.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    full_name = request.form.get('full_name')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    birth_date = request.form.get('birth_date')
+    profile_img = request.files.get('profile_img')
+
+    current_user.full_name = full_name
+    current_user.email = email
+    current_user.phone = phone
+    current_user.birth_date = datetime.strptime(birth_date, '%Y-%m-%d') if birth_date else None
+
+    if profile_img:
+        profile_img_filename = f"profile_img_{current_user.id}.png"
+        profile_img_path = os.path.join(app.config['UPLOAD_FOLDER'], profile_img_filename)
+        profile_img.save(profile_img_path)
+        current_user.profile_img = profile_img_filename
+
+    db.session.commit()
+    flash('Profile updated successfully!', 'success')
+    return redirect(url_for('profile'))
+
 
 @app.route('/toggle_done/<int:todo_id>', methods=['POST'])
 @login_required
@@ -219,6 +256,17 @@ def delete(sno):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+
+@app.route('/change_password')
+@login_required
+def change_password():
+    # Logic for changing password
+    pass
 
 
 if __name__ == "__main__":

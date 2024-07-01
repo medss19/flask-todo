@@ -1,0 +1,26 @@
+.add{
+    width: 100%;
+}
+
+.add h2{
+    font-family: Poppins;
+    font-size: 36px;
+    text-align: left;
+}
+
+.add .icon{
+    justify-content: right;
+}
+
+.flash-message {
+    top: 80px; /* Position at the very top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050; /* Make sure it's above other elements */
+    width: 30%; /* Make it full width */
+    left: 400px; /* Position it to the left edge */
+    margin-left: 200px;
+    right: 0; /* Position it to the right edge */
+    position: fixed; /* Fix it at the top of the screen */
+}
