@@ -1,23 +1,67 @@
-/* styles.css */
-
 /* Style for the navbar-brand */
+.navbar {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+}
+
 .navbar-brand {
     display: flex;
-    align-items: center; /* Align items vertically */
-    color: #333; /* Adjust text color */
-    text-decoration: none; /* Remove underline */
+    align-items: center;
+    color: #333;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Style for the icon */
 .navbar-brand .icon {
-    margin-right: 10px; /* Adjust margin as needed */
-    width: 30px; /* Adjust icon width */
-    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px;
+    width: 30px;
+    height: auto;
 }
 
 /* Additional styles for the text */
 .navbar-brand .text {
-    font-size: 1.2rem; /* Adjust text size */
-    font-weight: bold; /* Adjust font weight */
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    transition: color 0.3s;
 }
 
+/* Style for the nav links */
+.nav-link {
+    color: #2c3e50;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effects for the nav links */
+.nav-link:hover {
+    background-color: #bbcef0;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.logout:hover {
+    background-color: #f08e8e;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.login:hover {
+    background-color: #8ef0ad;
+    color: #fff;
+    border-radius: 5px;
+}
+
+/* Navbar-toggler styles */
+.navbar-toggler {
+    border: none;
+}
+
+.d-flex {
+    margin-right: 10px;
+}
+
+/* Navbar-toggler icon color */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' linecap='round' linejoin='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
