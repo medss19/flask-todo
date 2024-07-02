@@ -88,7 +88,7 @@ h2{
 }
 
 body {
-    background-color: rgb(226, 252, 243);
+    background-color: rgb(231, 249, 243);
 }
 
 .container {
@@ -106,4 +106,17 @@ body {
         transform: translateY(0); /* Final state */
         opacity: 1; /* Final opacity */
     }
+}
+
+.flash-message {
+    top: 7px; /* Position at the very top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050; /* Make sure it's above other elements */
+    width: 30%; /* Make it full width */
+    left: 400px; /* Position it to the left edge */
+    margin-left: 104px;
+    right: 0; /* Position it to the right edge */
+    position: fixed; /* Fix it at the top of the screen */
 }

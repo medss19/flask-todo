@@ -15,11 +15,11 @@
                                 <img src="{{ url_for('static', filename='uploads/' + (current_user.profile_img or '../images/default.png')) }}" alt="Admin" class="rounded-circle" width="150">
                                 <div class="mt-3">
                                     <h4>{{ current_user.username }}</h4>
-                                    <p class="text-secondary mb-1">Full Stack Developer</p>
-                                    <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                                    <button class="btn btn-primary">Follow</button>
-                                    <button class="btn btn-outline-primary">Message</button>
-                                </div>
+                                    <p class="text-secondary mb-1" id="user-bio">{{ current_user.bio or 'No bio available' }}</p>
+                                    <p class="text-muted font-size-sm">Joined on {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+                                    <button class="btn btn-primary" id="edit-button">Edit</button>
+                                    <button class="btn btn-outline-primary" id="save-button" style="display: none;">Save</button>
+                                </div>                                                                                         
                             </div>
                         </div>
                     </div>

@@ -24,9 +24,10 @@ class User(UserMixin, db.Model):
     full_name = db.Column(db.String(150), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     birth_date = db.Column(db.Date, nullable=True)
-    profile_img = db.Column(db.String(150), nullable=True)  # path to profile image
+    profile_img = db.Column(db.String(150), nullable=True)  
     bio = db.Column(db.String(300), nullable=True)
     todos = db.relationship('Todo', backref='user', lazy=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -76,6 +77,15 @@ def update_profile():
     flash('Profile updated successfully!', 'success')
     return redirect(url_for('profile'))
 
+@app.route('/update_bio', methods=['POST'])
+@login_required
+def update_bio():
+    data = request.get_json()
+    if 'bio' in data:
+        current_user.bio = data['bio']
+        db.session.commit()
+        return jsonify({'success': True})
+    return jsonify({'success': False})
 
 @app.route('/toggle_done/<int:todo_id>', methods=['POST'])
 @login_required
