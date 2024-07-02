@@ -27,12 +27,25 @@ body, html {
     z-index: 1;
 }
 
-
 .login-box {
     width: 390px;
     overflow: hidden;
     position: relative;
     z-index: 2;
+    opacity: 0;
+    transform: translateX(100px); /* Start 100px to the right */
+    animation: slideLeft 1s forwards;
+}
+
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100px); /* Initial state */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0); /* Final state */
+    }
 }
 
 .login-box h2 {
@@ -52,7 +65,7 @@ body, html {
     height: auto; /* Maintain aspect ratio */
 }
 
-.login-form{
+.login-form {
     background-color: rgba(255, 255, 255, 0.9); 
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -73,7 +86,6 @@ body, html {
     font-size: 20px;
     color: #555;
     line-height: 1.2;
-    /* width: 74%; */
     width: calc(85% - 50px);
     margin-left: 23px;
     border: none;

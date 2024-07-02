@@ -7,45 +7,58 @@
 {% block body %}
 <div class="container my-3">
     {% if current_user.is_authenticated %}
-        <h4>Hello, {{ current_user.username }}</h4>
+    <div class="greeting d-flex align-items-center">
+        <img src="{{ url_for('static', filename='images/hand.png') }}" alt="Icon" class="icon">
+        <h4 class="greet ms-2">Hello, {{ current_user.username }}</h4>
+    </div>
     {% endif %}
     <br>
-    <div class="add">
-        <h2>Add a To-do</h2>
-        <img src="{{ url_for('static', filename='images/add.png') }}" alt="Icon" class="icon">
+    <div class="add-container">
+        <div class="add d-flex align-items-center">
+            <h2>Add a To-do</h2>
+            <img src="{{ url_for('static', filename='images/add.png') }}" alt="Icon" class="icon ms-2">
+        </div>
+        <br>
+        <form action="/" method="POST">
+            <div class="mb-3">
+                <strong><label for="title" class="form-label">To-do Title</label></strong>
+                <input type="text" class="form-control todo-input" name="title" id="title" aria-describedby="titleHelp" required>
+            </div>
+            <div class="mb-3">
+                <strong><label for="desc" class="form-label">To-do Description</label></strong>
+                <input type="text" class="form-control todo-input" name="desc" id="desc">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
-    <form action="/" method="POST">
-        <div class="mb-3">
-            <label for="title" class="form-label">To-do Title</label>
-            <input type="text" class="form-control" name="title" id="title" aria-describedby="titleHelp">
-        </div>
-        <div class="mb-3">
-            <label for="desc" class="form-label">To-do Description</label>
-            <input type="text" class="form-control" name="desc" id="desc">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
 </div>
+
 
 <div class="container my-3">
     <br>
-    <h2>Your To-dos</h2>
-    <form id="filterForm" class="d-flex" action="/filter" method="GET">
-        <select class="form-select me-2" name="filter" id="filter">
-            <option value="all">All</option>
-            <option value="due_date">Due Date</option>
-            <option value="priority">Priority</option>
-            <option value="done">Marked as Done</option>
-            <option value="not_done">Not Marked as Done</option>
-        </select>
-        <button type="submit" class="btn btn-outline-success">Filter</button>
-    </form>    
+    <div class="your-container">
+        <div class="d-flex align-items-center">
+            <h2 class="your">Your To-dos</h2>
+            <img src="{{ url_for('static', filename='images/task.png') }}" alt="Icon" class="icon ms-2">
+        </div>
+        <form id="filterForm" class="d-flex mt-3" action="/filter" method="GET">
+            <select class="form-select me-2" name="filter" id="filter">
+                <option value="all">All</option>
+                <option value="due_date">Due Date</option>
+                <option value="priority">Priority</option>
+                <option value="done">Marked as Done</option>
+                <option value="not_done">Not Marked as Done</option>
+            </select>
+            <button type="submit" class="btn btn-outline-success">Filter</button>
+        </form>
 
-    {% if allTodo|length == 0 %}
-        <div class="alert alert-dark" role="alert">
+        <br>
+
+        {% if allTodo|length == 0 %}
+        <div class="alert alert-warning flash-message" role="alert">
             No To-dos found. Add your first to-do now!
         </div>
-    {% else %}
+        {% else %}
         <table class="table">
             <thead>
                 <tr>
@@ -60,34 +73,36 @@
             </thead>
             <tbody>
                 {% for todo in allTodo %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>{{ todo.title }}</td>
-                        <td>{{ todo.desc }}</td>
-                        <td>{{ todo.formatted_date() }}</td>
-                        <td>
-                            <input type="date" class="form-control due-date-input" data-id="{{ todo.sno }}" value="{{ todo.due_date.strftime('%Y-%m-%d') if todo.due_date else '' }}">
-                        </td>
-                        <td>
-                            <select class="form-select priority-select" data-id="{{ todo.sno }}">
-                                <option value="low" {% if todo.priority == 'low' %}selected{% endif %}>Low</option>
-                                <option value="medium" {% if todo.priority == 'medium' %}selected{% endif %}>Medium</option>
-                                <option value="high" {% if todo.priority == 'high' %}selected{% endif %}>High</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn {% if todo.is_done %}btn-warning{% else %}btn-outline-warning{% endif %} mark-done-btn btn-sm mx-1" data-id="{{ todo.sno }}">
-                                {% if todo.is_done %}Done{% else %}Mark as done{% endif %}
-                            </button>
-                            <a href="/update/{{ todo.sno }}" class="btn btn-outline-success btn-sm mx-1">Update</a>
-                            <a href="/delete/{{ todo.sno }}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ todo.title }}</td>
+                    <td>{{ todo.desc }}</td>
+                    <td>{{ todo.formatted_date() }}</td>
+                    <td>
+                        <input type="date" class="form-control due-date-input" data-id="{{ todo.sno }}" value="{{ todo.due_date.strftime('%Y-%m-%d') if todo.due_date else '' }}">
+                    </td>
+                    <td>
+                        <select class="form-select priority-select" data-id="{{ todo.sno }}">
+                            <option value="low" {% if todo.priority == 'low' %}selected{% endif %}>Low</option>
+                            <option value="medium" {% if todo.priority == 'medium' %}selected{% endif %}>Medium</option>
+                            <option value="high" {% if todo.priority == 'high' %}selected{% endif %}>High</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn {% if todo.is_done %}btn-warning{% else %}btn-outline-warning{% endif %} mark-done-btn btn-sm mx-1" data-id="{{ todo.sno }}">
+                            {% if todo.is_done %}Done{% else %}Mark as done{% endif %}
+                        </button>
+                        <a href="/update/{{ todo.sno }}" class="btn btn-outline-success btn-sm mx-1">Update</a>
+                        <a href="/delete/{{ todo.sno }}" class="btn btn-outline-danger btn-sm mx-1">Delete</a>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
-    {% endif %}
+        {% endif %}
+    </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const prioritySelects = document.querySelectorAll('.priority-select');

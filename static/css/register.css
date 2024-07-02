@@ -1,4 +1,4 @@
-
+/* Style for the sign-up content */
 .signup-content {
     display: flex;
     align-items: center; /* Align items to the start */
@@ -14,7 +14,20 @@
     margin-top: 5%;
     justify-content: center;
     height: 74vh; /* Ensure it takes full viewport height */
+    opacity: 0;
+    transform: translateX(100px); /* Start 100px to the right */
+    animation: slideLeft 1s forwards;
+}
 
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(100px); /* Initial state */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0); /* Final state */
+    }
 }
 
 .signup-form {
@@ -52,6 +65,10 @@ h2 {
     font-family: Poppins;
     font-size: 36px;
     text-align: left; /* Ensure title alignment is to the left */
+}
+
+body{
+    background-color: rgb(255, 195, 185);
 }
 
 .register-form {
@@ -99,6 +116,7 @@ input {
     margin-top: 25px;
     cursor: pointer;
 }
+
 .form-control {
     margin-top: 6px;
     display: flex;

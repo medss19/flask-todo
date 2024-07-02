@@ -1,26 +1,109 @@
-.add{
-    width: 100%;
-}
-
-.add h2{
+h2{
     font-family: Poppins;
     font-size: 36px;
     text-align: left;
 }
 
-.add .icon{
-    justify-content: right;
-}
-
-.flash-message {
-    top: 80px; /* Position at the very top */
+/* Style for the greeting section */
+.greeting {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 1050; /* Make sure it's above other elements */
-    width: 30%; /* Make it full width */
-    left: 400px; /* Position it to the left edge */
-    margin-left: 200px;
-    right: 0; /* Position it to the right edge */
-    position: fixed; /* Fix it at the top of the screen */
+}
+
+.greeting .icon {
+    width: 30px; /* Adjust the width as needed */
+    height: auto;
+    margin-right: -1px; /* Optional: Adjust spacing between icon and text */
+    margin-top: 1px;
+}
+
+.greet {
+    font-family: "Merriweather", serif;
+    font-size: 30px;
+    font-weight: 700;
+    font-size: 1.5rem; /* Adjust font size as needed */
+    color: #333; /* Adjust text color as needed */
+    margin-top: 9px;
+}
+
+/* Style for the add section */
+.add {
+    display: flex;
+    align-items: center;
+}
+
+.add .icon {
+    width: 30px; /* Adjust the width as needed */
+    height: auto;
+    margin-left: 8px; /* Optional: Adjust spacing between text and icon */
+    margin-top: -14px;
+}
+
+.icon {
+    width: 40px;
+    height: auto;
+    margin-top: -14px;
+}
+
+.todo-input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.todo-input:focus {
+    outline: none;
+    border-color: #6c757d;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+.btn-primary {
+    background-color: #5100ff;
+    border-color: #220283;
+    color: #fff;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #220283;
+    border-color: #0056b3;
+    color: #fff;
+}
+
+.add-container {
+    background-color: rgb(249, 219, 238);
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+
+.your-container {
+    background-color: rgb(204, 234, 247);
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+body {
+    background-color: rgb(226, 252, 243);
+}
+
+.container {
+    opacity: 0;
+    transform: translateY(-20px); /* Initial state: slightly above its final position */
+    animation: slideDown 1s forwards;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px); /* Initial state */
+        opacity: 0; /* Initial opacity */
+    }
+    to {
+        transform: translateY(0); /* Final state */
+        opacity: 1; /* Final opacity */
+    }
 }
