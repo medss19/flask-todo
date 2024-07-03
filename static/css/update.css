@@ -1,0 +1,78 @@
+h2 {
+    font-family: Poppins;
+    font-size: 36px;
+    text-align: left;
+}
+
+.update {
+    display: flex;
+    align-items: center;
+}
+
+.update .icon {
+    width: 30px;
+    height: auto;
+    margin-left: 8px;
+    margin-top: -14px;
+}
+
+.icon {
+    width: 40px;
+    height: auto;
+    margin-top: -14px;
+}
+
+.todo-update {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+.todo-update:focus {
+    outline: none;
+    border-color: #6c757d;
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+.btn-primary {
+    background-color: #5100ff;
+    border-color: #220283;
+    color: #fff;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #220283;
+    border-color: #0056b3;
+    color: #fff;
+}
+
+.update-container {
+    background-color: rgb(249, 219, 238);
+    border-radius: 5px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+body {
+    background-color: rgb(231, 249, 243);
+}
+
+.container {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideDown 1s forwards;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
