@@ -23,15 +23,6 @@
                 <button type="submit" class="login-btn btn-primary">Login</button>
             </div>
         </form>
-        <!-- {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for category, message in messages %}
-                        <strong> <p class="flash-{{ category }}">{{ message }}</p> </strong>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %} -->
         <div class="container">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -44,4 +35,13 @@
     </div>
 </div>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<script>
+    // Timeout function to hide flash messages after 4 seconds
+    setTimeout(function() {
+        var flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+            flashMessage.remove();
+        }
+    }, 4000); // 4000 milliseconds = 4 seconds
+</script>
 {% endblock body %}

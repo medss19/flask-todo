@@ -104,6 +104,15 @@
 </div>
 
 <script>
+
+    // Timeout function to hide flash messages after 4 seconds
+    setTimeout(function() {
+        var flashMessage = document.querySelector('.flash-message');
+        if (flashMessage) {
+            flashMessage.remove();
+        }
+    }, 4000); // 4000 milliseconds = 4 seconds
+
     document.addEventListener('DOMContentLoaded', function() {
         const prioritySelects = document.querySelectorAll('.priority-select');
         prioritySelects.forEach(select => {

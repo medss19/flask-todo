@@ -6,6 +6,8 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+# from app import db
+# from app.models import User
 
 app = Flask(__name__, static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
@@ -24,9 +26,9 @@ class User(UserMixin, db.Model):
     full_name = db.Column(db.String(150), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     birth_date = db.Column(db.Date, nullable=True)
-    profile_img = db.Column(db.String(150), nullable=True)  
+    profile_img = db.Column(db.String(150), nullable=True)
     bio = db.Column(db.String(300), nullable=True)
-    todos = db.relationship('Todo', backref='user', lazy=True)
+    todos = db.relationship('Todo', backref='user', lazy=True, cascade="all, delete-orphan")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Todo(db.Model):
@@ -61,7 +63,11 @@ def update_profile():
     phone = request.form.get('phone')
     birth_date = request.form.get('birth_date')
     profile_img = request.files.get('profile_img')
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_new_password = request.form.get('confirm_new_password')
 
+    # Update user details
     current_user.full_name = full_name
     current_user.email = email
     current_user.phone = phone
@@ -73,19 +79,55 @@ def update_profile():
         profile_img.save(profile_img_path)
         current_user.profile_img = profile_img_filename
 
+    # Handle password change
+    if current_password and new_password and confirm_new_password:
+        if check_password_hash(current_user.password, current_password):
+            if new_password == confirm_new_password:
+                current_user.password = generate_password_hash(new_password)
+            else:
+                flash('New passwords do not match', 'danger')
+                return redirect(url_for('profile'))
+        else:
+            flash('Current password is incorrect', 'danger')
+            return redirect(url_for('profile'))
+
+    # Save changes
     db.session.commit()
-    flash('Profile updated successfully!', 'success')
+    flash('Profile updated successfully', 'success')
     return redirect(url_for('profile'))
+
+@app.route('/delete_profile_img', methods=['POST'])
+@login_required
+def delete_profile_img():
+    current_user.profile_img = None  # Or set to 'default.png' if needed
+    db.session.commit()
+    flash('Profile image deleted successfully.', 'success')
+    return '', 204  # Return an empty response with a 204 status code
+
+@app.route('/delete_account', methods=['POST'])
+@login_required
+def delete_account():
+    user = User.query.get(current_user.id)
+    if user:
+        logout_user()
+        db.session.delete(user)
+        db.session.commit()
+        flash('Your account has been deleted.', 'success')
+        return redirect(url_for('login'))
+    else:
+        flash('Failed to delete account.', 'danger')
+        return redirect(url_for('profile'))
 
 @app.route('/update_bio', methods=['POST'])
 @login_required
 def update_bio():
-    data = request.get_json()
-    if 'bio' in data:
-        current_user.bio = data['bio']
-        db.session.commit()
-        return jsonify({'success': True})
-    return jsonify({'success': False})
+    bio = request.form.get('bio')
+    current_user.bio = bio
+
+    # Save changes
+    db.session.commit()
+    flash('Bio updated successfully', 'success')
+    return redirect(url_for('profile'))
 
 @app.route('/toggle_done/<int:todo_id>', methods=['POST'])
 @login_required
